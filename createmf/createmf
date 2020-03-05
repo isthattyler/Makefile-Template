@@ -26,7 +26,7 @@ TARGETS=$1
 
 CC=@$2
 
-CFLAGS= -Wall -I -std=c++11
+CFLAGS= -Wall -I -std=$4
 
 SOURCE= \$(wildcard *.$3)
 
@@ -90,11 +90,13 @@ name="${filename%.*}"
 
 case $extension in
 	cs) COMPILER="mcs";
-	cSharpTemplate $name $COMPILER $extension;
+    STD="c++11"
+	cSharpTemplate $name $COMPILER $extension $STD;
 	exit 0;
 	;;
 	cpp) COMPILER="g++";
-	cTemplate $name $COMPILER $extension;
+    STD="c99"
+	cTemplate $name $COMPILER $extension $STD;
 	exit 0;
 	;;
 	c) COMPILER="c";
