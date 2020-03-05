@@ -14,7 +14,7 @@ cd Makefile-Template
 ./install
 ```
 
-After the installation process, you can use it right away. If you have created a file named 'foo.cpp', creating a Makefile for it and use it is as simple as:
+After the installation process, you can use it right away. If you already have source files and your main file is named 'foo.cpp', creating a Makefile for it and run it is as simple as:
 
 ```bash
 createmf foo.cpp
