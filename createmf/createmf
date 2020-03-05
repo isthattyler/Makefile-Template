@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Author: Tyler Nguyen
+# Version: v1.0
+
+
+# :%s/^[ ]\+/\t/g : to indent correctly
+
+usage()
+{
+	cat << EOF
+Description: Create a template Makefile for your current project.
+             It saves a lot of time configuring a Makefile.
+             This can be used both in a small and large project
+
+Usage: createmf {filename}
+EOF
+}
+
+cTemplate()
+{
+	# templates for C/C++
+	cat << EOF > Makefile
+
+TARGETS=$1
+
+CC=@$2
+
+CFLAGS= -Wall -I -std=c++11
+
+SOURCE= \$(wildcard *.$3)
+
+HFILES=\$(SOURCE:.cpp=.h)
+
+OFILES=\$(SOURCE:.cpp=.o)
+
+all: run
+
+%.o: %.$3
+	\$(CC) -c \$< -o \$@ \$(CFLAGS)
+
+\$(TARGETS): \$(OFILES)
+	\$(CC) -o \$(TARGETS) \$(OFILES)
+
+run: \$(TARGETS)
+	@./\$(TARGETS)
+
+clean:
+	@rm -f \$(TARGETS) a.out \$(TARGETS).exe *.o
+EOF
+}
+
+cSharpTemplate()
+{
+	# templates for C#
+	cat << EOF > Makefile
+
+TARGETS=$1
+
+CC=@$2
+
+CFLAGS= -out:\$(TARGETS)
+
+SOURCE= \$(wildcard *.$3)
+
+all: run
+
+\$(TARGETS): \$(TARGETS).$3
+	\$(CC) \$(CFLAGS) \$(TARGETS).$3
+
+run: \$(TARGETS)
+	@mono \$(TARGETS)
+
+clean:
+	@rm -f \$(TARGETS) \$(TARGETS).exe
+EOF
+}
+
+if [ -z "$1" ]; then
+	usage;
+	exit 0;
+fi
+
+# ${filename#*.} : # removes everything before the first dot (inclusive) from left to right
+# ${filename%.*} : % removes everything after the first dot (inclusive) from right to left
+filename=$1
+extension="${filename#*.}"
+name="${filename%.*}"
+
+
+case $extension in
+	cs) COMPILER="mcs";
+	cSharpTemplate $name $COMPILER $extension;
+	exit 0;
+	;;
+	cpp) COMPILER="g++";
+	cTemplate $name $COMPILER $extension;
+	exit 0;
+	;;
+	c) COMPILER="c";
+	cTemplate $name $COMPILER $extension;
+	exit 0;
+	;;
+esac
+
+

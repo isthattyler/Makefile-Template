@@ -1,0 +1,26 @@
+#!/bin/bash
+
+prefix="/usr/local"
+name="createmf"
+
+Install()
+{
+  echo "Installing $1 ...";
+  cd $name || return 1;
+  chmod a+x $1;
+  if  cp $1 $prefix/bin > /dev/null 2>&1;
+  then
+    echo "Successfully installed.";
+    cd .. || return 1
+  else
+    echo "Cannot install script. Try installing the script as sudo."
+    cd ..
+    exit 1;
+  fi
+}
+
+read -p "Do you want to install $name? [Y/n] " answer;
+case $answer in
+  [Yy]* ) Install $name;
+esac
+echo "Thanks for using my program.";
