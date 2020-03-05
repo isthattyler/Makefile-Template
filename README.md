@@ -9,6 +9,7 @@ This script automatically creates a Makefile for your project. Currently it only
 The script can be installed as follow:
 
 ```bash
+git clone https://github.com/isthattyler/Makefile-Template.git
 cd Makefile-Template
 ./install
 ```
