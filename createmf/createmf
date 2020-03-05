@@ -99,7 +99,7 @@ case $extension in
 	cTemplate $name $COMPILER $extension $STD;
 	exit 0;
 	;;
-	c) COMPILER="c";
+	c) COMPILER="gcc";
 	cTemplate $name $COMPILER $extension;
 	exit 0;
 	;;
