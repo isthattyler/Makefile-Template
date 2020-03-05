@@ -14,3 +14,11 @@ cd Makefile-Template
 ./install
 ```
 
+After the installation process, you can use it right away. If you have created a file named 'foo.cpp', creating a Makefile for it and use it is as simple as:
+
+```bash
+createmf foo.cpp
+make
+make clean
+```
+
