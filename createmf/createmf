@@ -90,17 +90,17 @@ name="${filename%.*}"
 
 case $extension in
 	cs) COMPILER="mcs";
-	STD="c++11"
-	cSharpTemplate $name $COMPILER $extension $STD;
+	cSharpTemplate $name $COMPILER $extension;
 	exit 0;
 	;;
 	cpp) COMPILER="g++";
-	STD="c99"
+	STD="c++11"
 	cTemplate $name $COMPILER $extension $STD;
 	exit 0;
 	;;
 	c) COMPILER="gcc";
-	cTemplate $name $COMPILER $extension;
+	STD="c99"
+	cTemplate $name $COMPILER $extension $STD;
 	exit 0;
 	;;
 esac
