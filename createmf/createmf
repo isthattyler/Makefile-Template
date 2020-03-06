@@ -10,8 +10,8 @@ usage()
 {
 	cat << EOF
 Description: Create a template Makefile for your current project.
-             It saves a lot of time configuring a Makefile.
-             This can be used both in a small and large project
+	It saves a lot of time configuring a Makefile.
+	This can be used both in a small and large project
 
 Usage: createmf {filename}
 EOF
@@ -40,13 +40,13 @@ all: run
 	\$(CC) -c \$< -o \$@ \$(CFLAGS)
 
 \$(TARGETS): \$(OFILES)
-	\$(CC) -o \$(TARGETS) \$(OFILES)
+	\$(CC) \$(CFLAGS) -o \$(TARGETS) \$(OFILES)
 
 run: \$(TARGETS)
 	@./\$(TARGETS)
 
 clean:
-	@rm -f \$(TARGETS) a.out \$(TARGETS).exe *.o
+	@rm -rf \$(TARGETS) *.out \$(TARGETS).exe *.o
 EOF
 }
 
@@ -72,7 +72,7 @@ run: \$(TARGETS)
 	@mono \$(TARGETS)
 
 clean:
-	@rm -f \$(TARGETS) \$(TARGETS).exe
+	@rm -rf \$(TARGETS) \$(TARGETS).exe
 EOF
 }
 
@@ -90,12 +90,12 @@ name="${filename%.*}"
 
 case $extension in
 	cs) COMPILER="mcs";
-    STD="c++11"
+	STD="c++11"
 	cSharpTemplate $name $COMPILER $extension $STD;
 	exit 0;
 	;;
 	cpp) COMPILER="g++";
-    STD="c99"
+	STD="c99"
 	cTemplate $name $COMPILER $extension $STD;
 	exit 0;
 	;;
