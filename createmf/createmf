@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Author: Tyler Nguyen
-# Version: v1.3
+# Version: v1.3.2
 
 
 # :%s/^[ ]\+/\t/g : to indent correctly
@@ -33,7 +33,7 @@ TARGETS=$1
 
 CC=@$2
 
-CFLAGS= -Wall -I -std=$4
+CFLAGS= -I -Wall -std=$4
 
 SOURCE= \$(wildcard *.$3)
 
