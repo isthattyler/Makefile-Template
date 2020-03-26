@@ -71,6 +71,7 @@ while getopts ":hu" opt; do
     u) Update;
       ;;
     \?) echo "Invalid option: $OPTARG" >&2;
+      usage;
       exit 1;
       ;;
   esac

@@ -98,6 +98,7 @@ while getopts ":ho:" opt; do
     o)  shift;
         ;;
     \?) echo "Invalid option: $OPTARG" >&2;
+        usage;
         exit 1;
         ;;
   esac
