@@ -6,6 +6,17 @@
 
 # :%s/^[ ]\+/\t/g : to indent correctly
 
+options()
+{
+  cat << EOF
+Options:
+  -h          open this manual
+  -o          give a custom target name
+
+Report bugs to tyler.t.nguyen@uconn.edu.
+EOF
+}
+
 usage()
 {
 	cat << EOF
@@ -16,12 +27,8 @@ Description: Create a template Makefile for your current project.
 Usage: createmf [-o] {fileName} {executableName}
 Usage: createmf [-h]
 
-Options:
-  -h          open this manual
-  -o          give a custom target name
-
-Report bugs to tyler.t.nguyen@uconn.edu.
 EOF
+options;
 }
 
 cTemplate()
@@ -98,7 +105,7 @@ while getopts ":ho:" opt; do
     o)  shift;
         ;;
     \?) echo "Invalid option: $OPTARG" >&2;
-        usage;
+      options;
         exit 1;
         ;;
   esac
