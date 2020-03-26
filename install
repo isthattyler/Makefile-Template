@@ -53,6 +53,8 @@ usage()
 Options:
   -h      Open this helper page
   -u      Update the script
+
+Report bugs to tyler.t.nguyen@uconn.edu.
 EOF
 }
 
