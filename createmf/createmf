@@ -12,7 +12,7 @@ options()
 Options:
 	-h          open this manual
 	-o          give a custom target name
-  -s          special tag to build a hierarchical directory structors for files
+	-s          special tag to build a hierarchical directory structors for files
 
 Report bugs to tyler.t.nguyen@uconn.edu.
 EOF
