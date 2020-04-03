@@ -8,10 +8,11 @@
 
 options()
 {
-  cat << EOF
+	cat << EOF
 Options:
-  -h          open this manual
-  -o          give a custom target name
+	-h          open this manual
+	-o          give a custom target name
+  -s          special tag to build a hierarchical directory structors for files
 
 Report bugs to tyler.t.nguyen@uconn.edu.
 EOF
@@ -26,6 +27,7 @@ Description: Create a template Makefile for your current project.
 
 Usage: createmf [-o] {fileName} {executableName}
 Usage: createmf [-h]
+Usage: createnf [-s] {fileName}
 
 EOF
 options;
@@ -61,6 +63,55 @@ run: \$(TARGETS)
 
 clean:
 	@rm -rf \$(TARGETS) *.out \$(TARGETS).exe *.o
+
+# None-File Targets
+.PHONY: all run clean
+EOF
+}
+
+cTemplateSpecial()
+{
+	# templates for C/C++
+	cat << EOF > Makefile
+
+TARGETS=$1
+
+CC=@$2
+
+CFLAGS= -Iinclude -Wall -std=$4
+
+MKDIR_P=@mkdir -p
+
+SRCDIR=src
+
+OBJDIR=bin
+
+SOURCE= \$(wildcard \$(SRCDIR)/*.$3)
+
+HFILES=\$(SOURCE:.cpp=.h)
+
+OFILES=\$(patsubst \$(SRCDIR)/%,\$(OBJDIR)/%,\$(SOURCE:.cpp=.o))
+
+all: directories run
+
+directories:
+	\$(MKDIR_P) \$(SRCDIR)
+	\$(MKDIR_P) \$(OBJDIR)
+
+\$(OBJDIR)/%.o: \$(SRCDIR)/%.$3
+	\$(CC) \$(CFLAGS) -c \$< -o \$@
+
+\$(TARGETS): \$(OFILES)
+	\$(CC) \$(CFLAGS) -o \$(TARGETS) \$(OFILES)
+
+run: \$(TARGETS)
+	@./\$(TARGETS)
+
+clean:
+	@rm -rf \$(TARGETS) *.out \$(TARGETS).exe *.o \$(OFILES)
+
+# None-File Targets
+.PHONY: all directories run clean
 EOF
 }
 
@@ -87,6 +138,9 @@ run: \$(TARGETS)
 
 clean:
 	@rm -rf \$(TARGETS) \$(TARGETS).exe
+
+# None-File Targets
+.PHONY: all run clean
 EOF
 }
 
@@ -97,25 +151,28 @@ fi
 
 # ${filename#*.} : # removes everything before the first dot (inclusive) from left to right
 # ${filename%.*} : % removes everything after the first dot (inclusive) from right to left
-while getopts ":ho:" opt; do
-  case $opt in
-    h)  usage;
-        exit 0;
-        ;;
-    o)  shift;
-        ;;
-    \?) echo "Invalid option: $OPTARG" >&2;
-      options;
-        exit 1;
-        ;;
-  esac
+while getopts ":ho:s" opt; do
+	case $opt in
+	h)  usage;
+	exit 0;
+	;;
+	o)  shift;
+	;;
+	s) special=1;
+	shift;
+	;;
+	\?) echo "Invalid option: $OPTARG" >&2;
+	options;
+	exit 1;
+	;;
+	esac
 done
 filename=$1
 extension="${filename#*.}"
 if [ -z "$2" ]; then
-  name="${filename%.*}"
+	name="${filename%.*}"
 else
-  name=$2
+	name=$2
 fi
 
 case $extension in
@@ -125,12 +182,12 @@ case $extension in
 	;;
 	cpp) COMPILER="g++";
 	STD="c++11"
-	cTemplate $name $COMPILER $extension $STD;
+	[[ "$special" -eq 1 ]] && cTemplateSpecial $name $COMPILER $extension $STD || cTemplate $name $COMPILER $extension $STD
 	exit 0;
 	;;
 	c) COMPILER="gcc";
 	STD="c99"
-	cTemplate $name $COMPILER $extension $STD;
+	[[ "$special" -eq 1 ]] && cTemplateSpecial $name $COMPILER $extension $STD || cTemplate $name $COMPILER $extension $STD
 	exit 0;
 	;;
 esac
